@@ -9,9 +9,8 @@ pragma solidity ^0.4.17;
  * @title ERC20Basic
  * @dev Simpler version of ERC20 interface
  * @dev see https://github.com/ethereum/EIPs/issues/179
- * Openzepellin ERC20Basic.sol
+ * @dev Openzepellin contracts/token/ERC20Basic.sol
  */
-
 contract ERC20Basic {
   uint256 public totalSupply;
   function balanceOf(address who) public constant returns (uint256);
@@ -24,13 +23,13 @@ contract ERC20Basic {
  * @dev see https://github.com/ethereum/EIPs/issues/20
  * @dev Openzepellin contracts/token/ERC20.sol 
  */
-
 contract ERC20 is ERC20Basic {
   function allowance(address owner, address spender) public constant returns (uint256);
   function transferFrom(address from, address to, uint256 value) public returns (bool);
   function approve(address spender, uint256 value) public returns (bool);
   event Approval(address indexed owner, address indexed spender, uint256 value);
 }
+
 
 /**
  * @title SafeMath
@@ -97,8 +96,17 @@ contract BasicToken is ERC20Basic {
   function balanceOf(address _owner) public constant returns (uint256 balance) {
     return balances[_owner];
   }
+
 }
 
+/**
+ * @title Standard ERC20 token
+ *
+ * @dev Implementation of the basic standard token.
+ * @dev https://github.com/ethereum/EIPs/issues/20
+ * @dev Based on code by FirstBlood: https://github.com/Firstbloodio/token/blob/master/smart_contract/FirstBloodToken.sol
+ * @dev Openzepellin contracts/token/StandardToken.sol
+ */
 contract StandardToken is ERC20, BasicToken {
 
   mapping (address => mapping (address => uint256)) internal allowed;
@@ -216,7 +224,6 @@ contract Ownable {
 
 }
 
-
 /**
  * @title Pausable
  * @dev Base contract which allows children to implement an emergency stop mechanism.
@@ -262,9 +269,10 @@ contract Pausable is Ownable {
   }
 }
 
-
 /**
- * Pausable token with moderator role and freeze address implementation
+ * @title axnPausableToken
+ * @dev Pausable token with moderator role and freeze address implementation
+ * @dev Based on the code by Everex Token https://github.com/EverexIO/EVXToken/blob/master/contracts/token/evxModeratedToken.sol
  *
  **/
 contract axnPausableToken is StandardToken, Pausable {
@@ -320,20 +328,51 @@ contract axnPausableToken is StandardToken, Pausable {
   }
 }
 
+/**
+ * @title Burnable Token
+ * @dev Token that can be irreversibly burned (destroyed).
+ * Openzepellin contracts/token/BurnableToken
+ */
+contract BurnableToken is StandardToken {
+
+    event Burn(address indexed burner, uint256 value);
+
+    /**
+     * @dev Burns a specific amount of tokens.
+     * @param _value The amount of token to be burned.
+     */
+    function burn(uint256 _value) public {
+        require(_value > 0);
+        require(_value <= balances[msg.sender]);
+        // no need to require value <= totalSupply, since that would imply the
+        // sender's balance is greater than the totalSupply, which *should* be an assertion failure
+
+        address burner = msg.sender;
+        balances[burner] = balances[burner].sub(_value);
+        totalSupply = totalSupply.sub(_value);
+        Burn(burner, _value);
+    }
+}
+
 
 /**
- * AXNToken
+ * @title AXNToken
+ * @dev AXNToken with 500m Tokens max supply
+ * 
  **/
-contract AXNToken is axnPausableToken {
-  string public constant version = "0.4";
+contract AXNToken is axnPausableToken, BurnableToken {
+  string public constant version = "1.0";
   string public constant name = "AEXON";
   string public constant symbol = "AXN";
   uint256 public constant decimals = 18;
-
+    
+    
   /**
    * @dev Constructor that gives msg.sendeRr all of existing tokens. 
    */
-  function AXNToken(uint256 _initialSupply) {   
-    totalSupply = _initialSupply;
-    balances[msg.sender] = _initialSupply;
+  function AXNToken() {   
+    totalSupply = 500000000 * 10**uint256(decimals); //make sure decimals is typecast to uint256
+    balances[msg.sender] = totalSupply;
   }
+ 
+}
