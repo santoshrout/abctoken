@@ -261,3 +261,79 @@ contract Pausable is Ownable {
     Unpause();
   }
 }
+
+
+/**
+ * Pausable token with moderator role and freeze address implementation
+ *
+ **/
+contract axnPausableToken is StandardToken, Pausable {
+
+  mapping(address => bool) frozen;
+
+  /**
+   * @dev Check if given address is frozen. Freeze works only if moderator role is active
+   * @param _addr address Address to check
+   */
+  function isFrozen(address _addr) constant returns (bool){
+      return frozen[_addr];
+  }
+
+  /**
+   * @dev Freezes address (no transfer can be made from or to this address).
+   * @param _addr address Address to be frozen
+   */
+  function freeze(address _addr) onlyOwner {
+      frozen[_addr] = true;
+  }
+
+  /**
+   * @dev Unfreezes frozen address.
+   * @param _addr address Address to be unfrozen
+   */
+  function unfreeze(address _addr) onlyOwner {
+      frozen[_addr] = false;
+  }
+
+  /**
+   * @dev Declines transfers from/to frozen addresses.
+   * @param _to address The address which you want to transfer to
+   * @param _value uint256 the amout of tokens to be transfered
+   */
+  function transfer(address _to, uint256 _value) whenNotPaused returns (bool) {
+    require(!isFrozen(msg.sender));
+    require(!isFrozen(_to));
+    return super.transfer(_to, _value);
+  }
+
+  /**
+   * @dev Declines transfers from/to/by frozen addresses.
+   * @param _from address The address which you want to send tokens from
+   * @param _to address The address which you want to transfer to
+   * @param _value uint256 the amout of tokens to be transfered
+   */
+  function transferFrom(address _from, address _to, uint256 _value) whenNotPaused returns (bool) {
+    require(!isFrozen(msg.sender));
+    require(!isFrozen(_from));
+    require(!isFrozen(_to));
+    return super.transferFrom(_from, _to, _value);
+  }
+}
+
+
+/**
+ * AXNToken
+ **/
+contract AXNToken is axnPausableToken {
+  string public constant version = "0.4";
+  string public constant name = "AEXON";
+  string public constant symbol = "AXN";
+  uint256 public constant decimals = 18;
+
+  /**
+   * @dev Constructor that gives msg.sendeRr all of existing tokens. 
+   */
+  function AXNToken(uint256 _initialSupply) {   
+    totalSupply = _initialSupply;
+    balances[msg.sender] = _initialSupply;
+  }
