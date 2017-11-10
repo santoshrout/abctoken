@@ -364,11 +364,11 @@ contract AXNToken is axnPausableToken, BurnableToken {
   string public constant version = "1.0";
   string public constant name = "AEXON";
   string public constant symbol = "AXN";
-  uint256 public constant decimals = 18;
+  uint8 public constant decimals = 18;
     
     
   /**
-   * @dev Constructor that gives msg.sendeRr all of existing tokens. 
+   * @dev Constructor that gives msg.sender all of existing tokens. 
    */
   function AXNToken() {   
     totalSupply = 500000000 * 10**uint256(decimals); //make sure decimals is typecast to uint256
