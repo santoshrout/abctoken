@@ -371,7 +371,7 @@ contract AXNToken is axnPausableToken, BurnableToken {
    * @dev Constructor that gives msg.sender all of existing tokens. 
    */
   function AXNToken() {   
-    totalSupply = 500000000 * 10**uint256(decimals); //make sure decimals is typecast to uint256
+    totalSupply = 1000000000 * 10**uint256(decimals); //make sure decimals is typecast to uint256
     balances[msg.sender] = totalSupply;
   }
  
