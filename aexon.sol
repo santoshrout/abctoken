@@ -280,7 +280,7 @@ contract axnPausableToken is StandardToken, Pausable {
   mapping(address => bool) frozen;
 
   /**
-   * @dev Check if given address is frozen. Freeze works only if moderator role is active
+   * @dev Check if given address is frozen. 
    * @param _addr address Address to check
    */
   function isFrozen(address _addr) constant returns (bool){
