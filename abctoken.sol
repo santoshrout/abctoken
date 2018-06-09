@@ -356,14 +356,14 @@ contract BurnableToken is StandardToken {
 
 
 /**
- * @title AXNToken
- * @dev AXNToken with 500m Tokens max supply
+ * @title ABCToken
+ * @dev ABCToken with 100m Tokens max supply
  * 
  **/
 contract AXNToken is axnPausableToken, BurnableToken {
   string public constant version = "1.0";
-  string public constant name = "AEXON";
-  string public constant symbol = "AXN";
+  string public constant name = "ABC Token";
+  string public constant symbol = "ABC";
   uint8 public constant decimals = 18;
     
     
