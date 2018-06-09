@@ -270,12 +270,12 @@ contract Pausable is Ownable {
 }
 
 /**
- * @title axnPausableToken
+ * @title abcPausableToken
  * @dev Pausable token with moderator role and freeze address implementation
  * @dev Based on the code by Everex Token https://github.com/EverexIO/EVXToken/blob/master/contracts/token/evxModeratedToken.sol
  *
  **/
-contract axnPausableToken is StandardToken, Pausable {
+contract abcPausableToken is StandardToken, Pausable {
 
   mapping(address => bool) frozen;
 
@@ -360,7 +360,7 @@ contract BurnableToken is StandardToken {
  * @dev ABCToken with 100m Tokens max supply
  * 
  **/
-contract ABCToken is axnPausableToken, BurnableToken {
+contract ABCToken is abcPausableToken, BurnableToken {
   string public constant version = "1.0";
   string public constant name = "ABC Token";
   string public constant symbol = "ABC";
