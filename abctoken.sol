@@ -1,8 +1,8 @@
 pragma solidity ^0.4.17;
 
 /**
-* AEXON Token Contract
-* Copyright © 2017 by AEXON https://aexon.net
+* ABC Token Contract
+* Copyright © 2018 by ABC
 */
 
 /**
