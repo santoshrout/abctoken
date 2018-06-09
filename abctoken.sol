@@ -360,7 +360,7 @@ contract BurnableToken is StandardToken {
  * @dev ABCToken with 100m Tokens max supply
  * 
  **/
-contract AXNToken is axnPausableToken, BurnableToken {
+contract ABCToken is axnPausableToken, BurnableToken {
   string public constant version = "1.0";
   string public constant name = "ABC Token";
   string public constant symbol = "ABC";
@@ -370,7 +370,7 @@ contract AXNToken is axnPausableToken, BurnableToken {
   /**
    * @dev Constructor that gives msg.sender all of existing tokens. 
    */
-  function AXNToken() {   
+  function ABCToken() {   
     totalSupply = 1000000000 * 10**uint256(decimals); //make sure decimals is typecast to uint256
     balances[msg.sender] = totalSupply;
   }
